@@ -9,6 +9,7 @@ import Image, { StaticImageData } from "next/image";
 import logo from "@/img/logo.png";
 import nike from "@/img/nike.jpg";
 import gengar from "@/img/gengar.jpg";
+import { Instagram } from "lucide-react";
 
 type ImgType = string | StaticImageData;
 
@@ -29,13 +30,13 @@ export default function QuoteCalculator() {
     {
       id: "intermedio",
       name: "Intermedio",
-      price: 25,
+      price: 15,
       image: nike,
     },
     {
       id: "dificil",
       name: "Dificil",
-      price: 30,
+      price: 20,
       image: gengar,
     },
   ]);
@@ -182,7 +183,7 @@ export default function QuoteCalculator() {
         </Card>
 
         {/* Disclaimer */}
-        <div className="flex flex-col items-center justify-center ">
+        <div className="flex flex-col items-center justify-center  ">
           <p className="text-foreground/80 text-sm text-center leading-relaxed">
             El precio calculado es una estimación orientativa. El valor final
             puede variar según el diseño, nivel de detalle y materiales
@@ -190,9 +191,22 @@ export default function QuoteCalculator() {
             instagram.
           </p>
 
-          <div className="relative w-64 h-64 overflow-hidden">
-            <Image src={logo} alt="Logo" fill className="object-cover" />
+          <div className="relative w-64 h-64 overflow-hidden text-center">
+            <Link
+              href="https://www.instagram.com/homespun.rugs/"
+              target="_blank"
+            >
+              <Image src={logo} alt="Logo" fill className="object-cover" />
+            </Link>
           </div>
+          <Link
+            href="https://www.instagram.com/homespun.rugs/"
+            target="_blank"
+            className="inline-flex items-center gap-1 hover:text-primary/80 transition-colors "
+          >
+            <Instagram className="h-6 w-6 text-primary" />
+            <span className="font-semibold">@homespun.rugs</span>
+          </Link>
         </div>
       </div>
     </div>
