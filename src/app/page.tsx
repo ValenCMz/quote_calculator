@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Settings } from "lucide-react";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
+import logo from "@/img/logo.png";
 import nike from "@/img/nike.jpg";
 import gengar from "@/img/gengar.jpg";
 
@@ -78,9 +79,11 @@ export default function QuoteCalculator() {
       <div className="max-w-2xl mx-auto">
         {/* Header with Admin Link */}
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-            Calculadora de Alfombras
-          </h1>
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+              Calculadora de Alfombras
+            </h1>
+          </div>
         </div>
 
         {/* Dimension Selectors */}
@@ -179,12 +182,18 @@ export default function QuoteCalculator() {
         </Card>
 
         {/* Disclaimer */}
-        <p className="text-foreground/80 text-sm text-center leading-relaxed">
-          El precio calculado es una estimación orientativa. El valor final
-          puede variar según el diseño, nivel de detalle y materiales
-          seleccionados, para una cotización más precisa enviar un mensaje por
-          instagram.
-        </p>
+        <div className="flex flex-col items-center justify-center ">
+          <p className="text-foreground/80 text-sm text-center leading-relaxed">
+            El precio calculado es una estimación orientativa. El valor final
+            puede variar según el diseño, nivel de detalle y materiales
+            seleccionados, para una cotización más precisa enviar un mensaje por
+            instagram.
+          </p>
+
+          <div className="relative w-64 h-64 overflow-hidden">
+            <Image src={logo} alt="Logo" fill className="object-cover" />
+          </div>
+        </div>
       </div>
     </div>
   );
