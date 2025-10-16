@@ -27,14 +27,14 @@ export default function QuoteCalculator() {
     Array<DesignLevel & { image: ImgType }>
   >([
     {
-      id: "simple",
-      name: "Simple",
-      price: 20,
+      id: "intermedio",
+      name: "Intermedio",
+      price: 25,
       image: nike,
     },
     {
-      id: "intermedio",
-      name: "Intermedio",
+      id: "dificil",
+      name: "Dificil",
       price: 30,
       image: gengar,
     },
