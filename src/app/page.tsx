@@ -1,103 +1,191 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState, useEffect } from "react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Settings } from "lucide-react";
+import Link from "next/link";
+import Image, { StaticImageData } from "next/image";
+import nike from "@/img/nike.jpg";
+import gengar from "@/img/gengar.jpg";
+
+type ImgType = string | StaticImageData;
+
+interface DesignLevel {
+  id: string;
+  name: string;
+  price: number;
+  image: ImgType;
+}
+
+export default function QuoteCalculator() {
+  const [width, setWidth] = useState(90);
+  const [height, setHeight] = useState(90);
+  const [selectedLevel, setSelectedLevel] = useState<string>("simple");
+  const [designLevels, setDesignLevels] = useState<
+    Array<DesignLevel & { image: ImgType }>
+  >([
+    {
+      id: "simple",
+      name: "Simple",
+      price: 20,
+      image: nike,
+    },
+    {
+      id: "intermedio",
+      name: "Intermedio",
+      price: 30,
+      image: gengar,
+    },
+  ]);
+
+  // Load prices from localStorage on mount
+  useEffect(() => {
+    const savedPrices = localStorage.getItem("carpetPrices");
+    if (savedPrices) {
+      const prices = JSON.parse(savedPrices);
+      setDesignLevels((prev) =>
+        prev.map((level) => ({
+          ...level,
+          price: prices[level.id] || level.price,
+        }))
+      );
+    }
+  }, []);
+
+  const dimensionOptions = [60, 70, 80, 90, 100, 120, 150, 180, 200, 250, 300];
+
+  const area = width * height;
+  const selectedLevelData = designLevels.find((l) => l.id === selectedLevel);
+  const pricePerCm2 = selectedLevelData?.price || 0;
+  const totalPrice = area * pricePerCm2;
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat("es-AR", {
+      style: "currency",
+      currency: "ARS",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat("es-AR").format(num);
+  };
+
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-br from-secondary/30 via-accent/30 to-secondary/50 p-4 md:p-8">
+      <div className="max-w-2xl mx-auto">
+        {/* Header with Admin Link */}
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+            Calculadora de Alfombras
+          </h1>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* Dimension Selectors */}
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          <div>
+            <label className="block text-primary text-sm font-medium mb-2">
+              Ancho
+            </label>
+            <select
+              value={width}
+              onChange={(e) => setWidth(Number(e.target.value))}
+              className="w-full bg-accent/40 border-2 border-primary rounded-2xl px-4 py-4 text-foreground text-xl font-semibold appearance-none cursor-pointer hover:bg-accent/60 transition-colors"
+            >
+              {dimensionOptions.map((dim) => (
+                <option key={dim} value={dim}>
+                  {dim} cm
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block text-primary text-sm font-medium mb-2">
+              Alto
+            </label>
+            <select
+              value={height}
+              onChange={(e) => setHeight(Number(e.target.value))}
+              className="w-full bg-accent/40 border-2 border-primary rounded-2xl px-4 py-4 text-foreground text-xl font-semibold appearance-none cursor-pointer hover:bg-accent/60 transition-colors"
+            >
+              {dimensionOptions.map((dim) => (
+                <option key={dim} value={dim}>
+                  {dim} cm
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Design Level Selection */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-primary mb-4 text-center">
+            Nivel de Diseño
+          </h2>
+          <div className="grid grid-cols-2 gap-5 w-full mx-auto justify-center items-center scale-105">
+            {designLevels.map((level) => (
+              <button
+                key={level.id}
+                onClick={() => setSelectedLevel(level.id)}
+                className={`relative rounded-2xl p-6 transition-all flex flex-col items-center ${
+                  selectedLevel === level.id
+                    ? "bg-accent/60 border-2 border-primary scale-105"
+                    : "bg-accent/30 border-2 border-accent hover:bg-accent/40"
+                }`}
+              >
+                <div className="aspect-square rounded-xl overflow-hidden mb-3 bg-background/50 w-[150px] h-[150px] relative">
+                  <Image
+                    src={level.image}
+                    alt={level.name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <span className="block text-foreground font-bold text-xl mt-3 text-center">
+                  {level.name}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Quote Display */}
+        <Card className="bg-primary/20 border-2 border-primary rounded-3xl p-6 mb-6">
+          <h2 className="text-2xl font-bold text-primary text-center mb-4">
+            Cotización
+          </h2>
+          <div className="text-center mb-6">
+            <p className="text-5xl md:text-6xl font-bold text-foreground">
+              {formatPrice(totalPrice)}
+            </p>
+          </div>
+          <div className="bg-primary/10 rounded-2xl p-4 border border-primary">
+            <h3 className="text-foreground font-semibold text-center mb-3">
+              Detalle del cálculo:
+            </h3>
+            <div className="text-foreground text-sm space-y-1 text-center">
+              <p>
+                Dimensiones: {width} × {height} cm
+              </p>
+              <p>Área total: {formatNumber(area)} cm²</p>
+              <p>
+                Nivel {selectedLevelData?.name}: ${pricePerCm2} ×{" "}
+                {formatNumber(area)} cm²
+              </p>
+            </div>
+          </div>
+        </Card>
+
+        {/* Disclaimer */}
+        <p className="text-foreground/80 text-sm text-center leading-relaxed">
+          El precio calculado es una estimación orientativa. El valor final
+          puede variar según el diseño, nivel de detalle y materiales
+          seleccionados, para una cotización más precisa enviar un mensaje por
+          instagram.
+        </p>
+      </div>
     </div>
   );
 }
